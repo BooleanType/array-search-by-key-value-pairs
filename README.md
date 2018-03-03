@@ -24,7 +24,7 @@ $cars = [
     
 Data, retrieved from database, very often looks like that, isn't it?
 
-For example, we need to get all elements in `$cars`, where `'vendor`' is `'Ford'`. All we need to do, is to call provided `getElemsByKeyValPairs()` function:
+For example, we need to get all elements in `$cars`, where `'vendor`' is `'Ford'`. All we need to do, is to call provided **`getElemsByKeyValPairs()`** function:
 
 ```php
 $filteredCars = getElemsByKeyValPairs($cars, ['vendor' => 'Ford']);
