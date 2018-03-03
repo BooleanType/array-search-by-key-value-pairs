@@ -5,6 +5,8 @@
 Function gets an array (`$array`), searches for multiple key/value pairs (`$search`) in `$array`'s second dimension and returns filtered
 `$array` (with those values, that contain matches with `$search`).
 
+- The minimum required PHP version is PHP 5.4.
+
 ### How-to
 Consider the following two-dimensional array:
     
