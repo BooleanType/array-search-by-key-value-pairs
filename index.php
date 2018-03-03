@@ -237,7 +237,7 @@
         $matchedKeys = searchElemsByKeyValPair($array, $search, $logicOperator);
 
         if (!empty($matchedKeys)) {
-            //remain only those elems in $array, which keys are in $matchedArrKeys
+            //remain only those elems in $array, which keys are in $matchedKeys
             //https://stackoverflow.com/a/4260168/4695280
             $matchedElems = array_intersect_key($array, array_flip($matchedKeys));
             
