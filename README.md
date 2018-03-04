@@ -72,7 +72,7 @@ $filteredCars = getElemsByKeyValPairs($cars, $search);
 `$filteredCars` contains `$car` element with `ID` = 12.
 
 **Available comparison operators**: `==`, `===`, `>`, `<`, `>=`, `<=`, `!=`, `!==`, `<>`, `in` (SQL `IN` operator analogue), `preg` (`preg_match()` is used).
-If you input unsupported operator, it will be replaced with `==`.
+If you input unsupported operator (for ex., `=`), `==` will be used instead.
 
 ----
 
