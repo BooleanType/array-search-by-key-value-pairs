@@ -81,11 +81,11 @@ If you input unsupported operator (for ex., `=`), `==` will be used instead.
 `$cars` array from **"How-to"** section is taken as a basis.
 
 ```php
-    //'vendor' == 'Ford'. Result contains elemnts with IDs 105, 1005
+    //'vendor' == 'Ford'. Result contains elements with IDs 105, 1005
     $filteredCars = getElemsByKeyValPairs($cars, ['vendor' => 'Ford']);
 
 
-    //'vendor' == 'Ford'. IDs 105, 1005 ($filteredCars keys are 5,6 instead of 0, 1)
+    //'vendor' == 'Ford'. IDs 105, 1005 ($filteredCars keys are 5, 6 instead of 0, 1)
     $filteredCars = getElemsByKeyValPairs($cars, ['vendor' => 'Ford'], 'and', false);
 
 
