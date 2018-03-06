@@ -92,6 +92,9 @@ If you input unsupported operator (for ex., `=`), `==` will be used instead.
     //'model' == 'Corvett' AND 'color' == 'blue'. ID 12
     $filteredCars = getElemsByKeyValPairs($cars, ['model' => 'Corvett', 'color' => 'blue']);
     
+    //'model' == 'Corvett' OR 'color' == 'blue'. ID 10, 12, 15
+    $filteredCars = getElemsByKeyValPairs($cars, ['model' => 'Corvett', 'color' => 'blue'], 'or');
+    
     //'vendor' == 'Chevrolet' AND 'price' >= 30000. IDs 12, 22
     $filteredCars = getElemsByKeyValPairs($cars, [ ['==', 'vendor', 'Chevrolet'], ['>=', 'price', 30000] ]);
     
