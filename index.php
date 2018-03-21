@@ -30,7 +30,7 @@
      * 
      * <pre>
      *      $search = ['Manufacturer' => 'Motorola', 'Model' => 'Droid X2']; //search WHERE 'Manufacturer' = 'Motorola' AND 'Model' = 'Droid X2'
-     *      $phoneIDs = searchElemsByKeyValPairs($phonesList, $search);
+     *      $phoneIDs = getKeysByKeyValPairs($phonesList, $search);
      * </pre>
      * 
      * $phoneIDs output contains $array key = 1, cause exactly value with that key contains matches with $search:
@@ -44,7 +44,7 @@
      *                  ['==', 'Manufacturer', 'Motorola'], 
      *                  ['>', 'Cost', 130000] 
      *                ]; //search WHERE 'Manufacturer' = 'Motorola' AND 'Cost' > 130000
-     *      $phoneIDs = searchElemsByKeyValPairs($phonesList, $search);
+     *      $phoneIDs = getKeysByKeyValPairs($phonesList, $search);
      * </pre>
      * 
      * $phoneIDs output contains $array key = 2:
@@ -62,7 +62,7 @@
      * @return array List with $array keys or empty array, if nothing found
      * @see https://stackoverflow.com/a/47866650/4695280
      */
-    function searchElemsByKeyValPairs ($array, $search, $logicOperator = 'and') {
+    function getKeysByKeyValPairs ($array, $search, $logicOperator = 'and') {
         $result = [];
 
         foreach ($array as $key => $value) { //iterate over each array element
@@ -228,13 +228,13 @@
      *                              If 'or', search will be with OR operator (search WHERE 'Manufacturer' = 'Motorola' OR 'Cost' > 130000)
      * @param boolean $reindex If TRUE, result array will be reindexed
      * @return array Filtered $array or empty array, if nothing found
-     * @see searchElemsByKeyValPairs()
+     * @see getKeysByKeyValPairs()
      */
     function getElemsByKeyValPairs ($array, $search, $logicOperator = 'and', $reindex = true) {
 
         $matchedElems = [];
 
-        $matchedKeys = searchElemsByKeyValPairs($array, $search, $logicOperator);
+        $matchedKeys = getKeysByKeyValPairs($array, $search, $logicOperator);
 
         if (!empty($matchedKeys)) {
             //remain only those elems in $array, which keys are in $matchedKeys
