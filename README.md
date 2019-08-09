@@ -1,6 +1,6 @@
 # array-search-by-key-value-pairs
 
-#### Simple functionality, that allows to searches the array for a given key-value pair(s). For instance, it can be useful, when you need to filter result from database with some conditions.
+#### Simple functionality, that allows to search the array for a given key-value pair(s). For instance, it can be useful, when you need to filter result from database with some conditions.
 
 Function gets an array (`$array`), searches for multiple key/value pairs (`$search`) in `$array`'s second dimension and returns filtered
 `$array` (with those values, that contain matches with `$search`).
