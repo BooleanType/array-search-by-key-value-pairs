@@ -9,7 +9,7 @@ Function gets an array (`$array`), searches for multiple key/value pairs (`$sear
 
 ### How-to
 Consider the following two-dimensional array:
-    
+
 ```php
 $cars = [
    ['id' => 10, 'vendor' => 'Chevrolet', 'model' => 'Corvett', 'price' => 25965, 'color' => 'red', 'is_reserved' => true],
@@ -71,8 +71,9 @@ $filteredCars = getElemsByKeyValPairs($cars, $search);
 
 `$filteredCars` contains `$car` element with `ID` = 12.
 
-**Available comparison operators**: `==`, `===`, `>`, `<`, `>=`, `<=`, `!=`, `!==`, `<>`, `in` (SQL `IN` operator analogue), `not in` (SQL `NOT IN` operator analogue), `preg` (`preg_match()` is used). Operators can be specified in **any letter case**.
-If you input unsupported operator (for ex., `=`), `==` will be used instead.
+**Available comparison operators**: `==`, `===`, `>`, `<`, `>=`, `<=`, `!=`, `!==`, `<>`, `in` and `strict in` (`in_array()` is used; in case of `strict in` comparison is strict), `not in` and `strict not in` (`!in_array()` is used; in case of `strict not in` comparison is strict), `preg` (`preg_match()` is used). Operators can be specified in **any letter case**.
+
+If you input unsupported operator (for example, `=`), `==` will be used instead.
 
 ----
 
@@ -82,135 +83,151 @@ If you input unsupported operator (for ex., `=`), `==` will be used instead.
 
 ```php
     // 'vendor' == 'Ford'. Result contains elements with IDs 105, 1005.
-    $filteredCars = getElemsByKeyValPairs($cars, ['vendor' => 'Ford']);
+	$filteredCars = getElemsByKeyValPairs($cars, ['vendor' => 'Ford']);
 
-    // 'vendor' == 'Ford'. IDs 105, 1005 ($filteredCars keys are 5, 6 instead of 0, 1).
-    $filteredCars = getElemsByKeyValPairs($cars, ['vendor' => 'Ford'], 'and', false);
+	// 'vendor' == 'Ford'. IDs 105, 1005 ($filteredCars keys are 5, 6 instead of 0, 1).
+	$filteredCars = getElemsByKeyValPairs($cars, ['vendor' => 'Ford'], 'and', false);
 
-    // 'model' == 'Corvett' AND 'color' == 'blue'. ID 12.
-    $filteredCars = getElemsByKeyValPairs($cars, ['model' => 'Corvett', 'color' => 'blue']);
+	// 'model' == 'Corvett' AND 'color' == 'blue'. ID 12.
+	$filteredCars = getElemsByKeyValPairs($cars, ['model' => 'Corvett', 'color' => 'blue']);
 
-    // 'model' == 'Corvett' OR 'color' == 'blue'. IDs 10, 12, 15.
-    $filteredCars = getElemsByKeyValPairs($cars, ['model' => 'Corvett', 'color' => 'blue'], 'or');
+	// 'model' == 'Corvett' OR 'color' == 'blue'. IDs 10, 12, 15.
+	$filteredCars = getElemsByKeyValPairs($cars, ['model' => 'Corvett', 'color' => 'blue'], 'or');
 
-    // 'vendor' == 'Chevrolet' AND 'price' >= 30000. IDs 12, 22.
-    $filteredCars = getElemsByKeyValPairs(
-        $cars,
-        [
-            ['==', 'vendor', 'Chevrolet'],
-            ['>=', 'price', 30000]
-        ]
-    );
+	// 'vendor' == 'Chevrolet' AND 'price' >= 30000. IDs 12, 22.
+	$filteredCars = getElemsByKeyValPairs(
+		$cars,
+		[
+			['==', 'vendor', 'Chevrolet'],
+			['>=', 'price', 30000]
+		]
+	);
 
-    // 'vendor' == 'Ford' AND 'model' != 'Fiesta'. ID 1005.
-    $filteredCars = getElemsByKeyValPairs(
-        $cars,
-        [
-            ['==', 'vendor', 'Ford'],
-            ['!=', 'model', 'Fiesta']
-        ]
-    );
-
-
-    // Two calls below do the same thing.
-    // 'price' == 30000 OR 'price' == 50000. IDs 22, 1005.
-    $filteredCars = getElemsByKeyValPairs(
-        $cars,
-        [
-            ['==', 'price', 30000],
-            ['==', 'price', 50000]
-        ],
-        'or'
-    );
-
-    // 'price' IN (30000, 50000). IDs 22, 1005.
-    $filteredCars = getElemsByKeyValPairs(
-        $cars,
-        [
-            ['in', 'price', [30000, 50000]]
-        ]
-    );
+	// 'vendor' == 'Ford' AND 'model' != 'Fiesta'. ID 1005.
+	$filteredCars = getElemsByKeyValPairs(
+		$cars,
+		[
+			['==', 'vendor', 'Ford'],
+			['!=', 'model', 'Fiesta']
+		]
+	);
 
 
-    // 'color' IN ('blue', 'red') AND 'is_reserved' == true. IDs 10, 15.
-    $filteredCars = getElemsByKeyValPairs(
-        $cars,
-        [
-            ['in', 'color', ['blue', 'red']],
-            ['==', 'is_reserved', true]
-        ]
-    );
+	// Two calls below do the same thing.
+	// 'price' == 30000 OR 'price' == 50000. IDs 22, 1005.
+	$filteredCars = getElemsByKeyValPairs(
+		$cars,
+		[
+			['==', 'price', 30000],
+			['==', 'price', 50000]
+		],
+		'or'
+	);
 
-    // Usage of 'IN' operator with non-array value is not really correct syntax.
-    // However, in case below condition is: 'color' == 'blue' (notice, that 'red' is ignored
-    // as it is fourth unexpected parameter for array with conditions). IDs 12, 15.
-    $filteredCars = getElemsByKeyValPairs(
-        $cars,
-        [
-            ['in', 'color', 'blue', 'red']
-        ]
-    );
+	// in_array('price', [30000, 50000]). IDs 22, 1005.
+	$filteredCars = getElemsByKeyValPairs(
+		$cars,
+		[
+			['in', 'price', [30000, 50000]]
+		]
+	);
 
-    // 'color' IN ('blue', 'red') OR 'is_reserved' == true. IDs 10, 12, 15, 23, 1005.
-    // Please note that the IN operator is in capital case. Thus, it does not matter 
-    // in which case you specify the comparison operator.
-    $filteredCars = getElemsByKeyValPairs(
-        $cars,
-        [
-            ['IN', 'color', ['blue', 'red']],
-            ['==', 'is_reserved', true]
-        ],
-        'or'
-    );
 
-    // 'model' NOT IN ('Corvett', 'Camaro') AND 'color' != 'white'. ID 105.
-    $filteredCars = getElemsByKeyValPairs(
-        $cars,
-        [
-            ['not in', 'model', ['Corvett', 'Camaro']],
-            ['<>', 'color', 'white']
-        ]
-    );
+	// in_array('price', [30000, 50000], true). ID 1005.
+	$filteredCars = getElemsByKeyValPairs(
+		$cars,
+		[
+			['strict in', 'price', ['30000', '50000']]
+		]
+	);
 
-    // All models, which begin with 'M' symbol. 3rd argument must be a valid regexp. IDs 23, 1005.
-    $filteredCars = getElemsByKeyValPairs(
-        $cars,
-        [
-            ['preg', 'model', '/^M/']
-        ]
-    );
+	// in_array('color', ['blue', 'red']) AND 'is_reserved' == true. IDs 10, 15.
+	$filteredCars = getElemsByKeyValPairs(
+		$cars,
+		[
+			['in', 'color', ['blue', 'red']],
+			['==', 'is_reserved', true]
+		]
+	);
 
-    // 'price' === 50000. Result is empty array, because comparison is strict.
-    $filteredCars = getElemsByKeyValPairs(
-        $cars,
-        [
-            ['===', 'price', 50000]
-        ]
-    );
+	// Usage of 'IN' operator with non-array value is not really correct syntax.
+	// However, in case below condition is: 'color' == 'blue' (notice, that 'red' is ignored
+	// as it is fourth, unexpected parameter for array with conditions). IDs 12, 15.
+	$filteredCars = getElemsByKeyValPairs(
+		$cars,
+		[
+			['in', 'color', 'blue', 'red']
+		]
+	);
 
-    // 'is_reserved' == null. ID 22 may be expected only, but result also contains IDs 12 and 105, where 'is_reserved' is false.
-    // IDs 12 and 105 appeared, because comparison IS NOT STRICT! Look the next example.
-    $filteredCars = getElemsByKeyValPairs($cars, ['is_reserved' => null]);
+	// in_array('color', ['blue', 'red']) OR 'is_reserved' == true. IDs 10, 12, 15, 23, 1005.
+	// Please note that the IN operator is in capital case. Thus, it does not matter 
+	// in which case you specify the comparison operator.
+	$filteredCars = getElemsByKeyValPairs(
+		$cars,
+		[
+			['IN', 'color', ['blue', 'red']],
+			['==', 'is_reserved', true]
+		],
+		'or'
+	);
 
-    // 'is_reserved' === null. ID 22 only, because comparison is strict.
-    $filteredCars = getElemsByKeyValPairs(
-        $cars,
-        [
-            ['===', 'is_reserved', null]
-        ]
-    );
+	// !in_array('model', ['Corvett', 'Camaro']) AND 'color' != 'white'. ID 105.
+	$filteredCars = getElemsByKeyValPairs(
+		$cars,
+		[
+			['not in', 'model', ['Corvett', 'Camaro']],
+			['<>', 'color', 'white']
+		]
+	);
 
-    // Field with name 'undefinedField' is absent in $cars, so empty array is returned.
-    $filteredCars = getElemsByKeyValPairs($cars, ['undefinedField' => 'Ford']);
+	// !in_array('is_reserved', [true, false], true). ID 22.
+	$filteredCars = getElemsByKeyValPairs(
+		$cars,
+		[
+			['strict not in', 'is_reserved', [true, false]],
+		]
+	);
 
-    // 'price' === 30000 OR 'undefinedField' > 100. Field with name 'undefinedField' is absent in $cars, 
-    // but 'price' = 30000 is found. Result contains element with ID 22.
-    $filteredCars = getElemsByKeyValPairs(
-        $cars,
-        [
-            ['==', 'price', 30000],
-            ['>', 'undefinedField', 100]
-        ],
-        'or'
-    );
+	// All models, which begin with 'M' symbol. 3rd argument must be a valid regexp. IDs 23, 1005.
+	$filteredCars = getElemsByKeyValPairs(
+		$cars,
+		[
+			['preg', 'model', '/^M/']
+		]
+	);
+
+	// 'price' === 50000. Result is empty array, because comparison is strict.
+	$filteredCars = getElemsByKeyValPairs(
+		$cars,
+		[
+			['===', 'price', 50000]
+		]
+	);
+
+	// 'is_reserved' == null. ID 22 may be expected only, but result also contains IDs 12 and 105, where 'is_reserved' is false.
+	// IDs 12 and 105 appeared, because comparison IS NOT STRICT! Look the next example.
+	$filteredCars = getElemsByKeyValPairs($cars, ['is_reserved' => null]);
+
+	// 'is_reserved' === null. ID 22 only, because comparison is strict.
+	$filteredCars = getElemsByKeyValPairs(
+		$cars,
+		[
+			['===', 'is_reserved', null]
+		]
+	);
+
+	// Field with name 'undefinedField' is absent in $cars, so empty array is returned.
+	$filteredCars = getElemsByKeyValPairs($cars, ['undefinedField' => 'Ford']);
+
+	// 'price' === 30000 OR 'undefinedField' > 100. Field with name 'undefinedField' is absent in $cars, 
+	// but 'price' = 30000 is found. Result contains element with ID 22.
+	$filteredCars = getElemsByKeyValPairs(
+		$cars,
+		[
+			['==', 'price', 30000],
+			['>', 'undefinedField', 100]
+		],
+		'or'
+	);
 ```
